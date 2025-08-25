@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Love</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: all 0.5s ease;
+        }
+        
+        /* STYLE UNTUK HALAMAN PASSWORD */
+        #passwordPage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .photo-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 25px;
+        }
+        
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 24px;
+            order: 2;
+        }
+        
+        .password-display {
+            font-size: 24px;
+            letter-spacing: 10px;
+            margin: 20px 0;
+            color: #ff6b6b;
+            min-height: 32px;
+            order: 3;
+        }
+        
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            order: 4;
+        }
+        
+        .dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 5px;
+        }
+        
+        .dot.filled {
+            background-color: #ff6b6b;
+        }
+        
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            order: 5;
+        }
+        
+        .key {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 50%;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #495057;
+        }
+        
+        .key:hover {
+            background-color: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+            transform: scale(1.05);
+        }
+        
+        .key:active {
+            transform: scale(0.95);
+        }
+        
+        .zero-key {
+            grid-column: 2;
+        }
+        
+        .clue {
+            margin-top: 20px;
+            font-style: italic;
+            color: #aaa;
+            font-size: 14px;
+            order: 6;
+        }
+        
+        .hearts {
+            margin-top: 15px;
+            font-size: 20px;
+            color: #ff6b6b;
+            order: 7;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+            order: 8;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .reset-btn {
+            margin-top: 15px;
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+            order: 9;
+        }
+        
+        .photo-frame {
+            width: 100%;
+            height: 180px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 0 0 20px 0;
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            order: 1;
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* STYLE UNTUK HALAMAN SURAT */
+        #letterPage {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .envelope {
+            background: linear-gradient(to bottom, #ff758c 0%, #ff7eb3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(3deg);
+        }
+        
+        .envelope:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.25);
+        }
+        
+        .envelope i {
+            font-size: 60px;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .envelope p {
+            color: white;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        
+        .letter {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+            border: 1px solid #ffecef;
+        }
+        
+        .letter:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%);
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .letter h1 {
+            color: #ff6b6b;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #ffecef;
+        }
+        
+        .letter p {
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 17px;
+            color: #555;
+            text-align: justify;
+        }
+        
+        .letter p:first-of-type:first-letter {
+            font-size: 32px;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-right: 5px;
+            line-height: 1;
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 30px;
+            font-style: italic;
+            color: #ff6b6b;
+            font-weight: bold;
+            border-top: 2px dashed #ffecef;
+            padding-top: 20px;
+        }
+        
+        .open-btn {
+            background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 17px;
+            margin-top: 25px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .open-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .envelope {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .date {
+            text-align: right;
+            color: #888;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+        }
+        
+        /* STYLE UNTUK HALAMAN BUNGA */
+        #flowerPage {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to top, #331133, #000);
+            z-index: 5;
+        }
+        
+        .garden {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000;
+        }
+        
+        .title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 158, 203, 0.3);
+            font-family: 'Arial', sans-serif;
+            font-size: 48px;
+            text-shadow: 0 0 10px rgba(255, 102, 163, 0.3);
+            letter-spacing: 5px;
+            z-index: 1;
+            text-align: center;
+            animation: title-pulse 8s infinite alternate;
+        }
+        
+        @keyframes title-pulse {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.4; }
+        }
+        
+        .flower {
+            position: absolute;
+            bottom: 50px;
+            animation: grow 10s forwards ease-in-out;
+            transform-origin: bottom center;
+            z-index: 2;
+            opacity: 0;
+        }
+        
+        .petals {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            animation: bloom 6s forwards;
+            animation-delay: 4s;
+            opacity: 0;
+        }
+        
+        .petal {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50% 50% 50% 0;
+            transform-origin: bottom right;
+            background: linear-gradient(to bottom, #ff9ecb, #ff66a3);
+            box-shadow: 0 0 10px rgba(255, 102, 163, 0.5);
+        }
+        
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(#ffff9e, #ffcc66);
+            border-radius: 50%;
+            z-index: 10;
+            animation: pulse 3s infinite alternate;
+            animation-delay: 5s;
+            box-shadow: 0 0 5px rgba(255, 204, 102, 0.5);
+        }
+        
+        .stem {
+            position: absolute;
+            top: 60px;
+            left: 29px;
+            width: 4px;
+            height: 0;
+            background: linear-gradient(to bottom, #88ff88, #44aa44);
+            border-radius: 2px;
+            animation: stem-grow 8s forwards;
+            animation-delay: 1s;
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 12px;
+            background: #44aa44;
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(-30deg);
+            opacity: 0;
+            animation: leaf-grow 2s forwards;
+        }
+        
+        .leaf1 {
+            top: 100px;
+            left: 20px;
+            animation-delay: 2.5s;
+        }
+        
+        .leaf2 {
+            top: 150px;
+            left: 35px;
+            transform: rotate(30deg);
+            animation-delay: 3s;
+        }
+        
+        /* Warna bunga yang berbeda */
+        .flower[data-type="1"] .petal { background: linear-gradient(to bottom, #ff9ecb, #ff66a3); }
+        .flower[data-type="2"] .petal { background: linear-gradient(to bottom, #ff85ba, #ff4d94); }
+        .flower[data-type="3"] .petal { background: linear-gradient(to bottom, #ff66a3, #ff3385); }
+        .flower[data-type="4"] .petal { background: linear-gradient(to bottom, #ff4d8d, #ff1a75); }
+        .flower[data-type="5"] .petal { background: linear-gradient(to bottom, #ff3399, #e60073); }
+        
+        /* Membuat kelopak bunga */
+        .petal:nth-child(1) { transform: rotate(0deg); }
+        .petal:nth-child(2) { transform: rotate(45deg); }
+        .petal:nth-child(3) { transform: rotate(90deg); }
+        .petal:nth-child(4) { transform: rotate(135deg); }
+        .petal:nth-child(5) { transform: rotate(180deg); }
+        .petal:nth-child(6) { transform: rotate(225deg); }
+        .petal:nth-child(7) { transform: rotate(270deg); }
+        .petal:nth-child(8) { transform: rotate(315deg); }
+        
+        /* Animasi */
+        @keyframes grow {
+            0% { 
+                transform: translateY(100px) scale(0.2); 
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bloom {
+            0% { 
+                transform: scale(0.2); 
+                opacity: 0;
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1;
+            }
+        }
+        
+        @keyframes stem-grow {
+            0% { height: 0; }
+            100% { height: 150px; }
+        }
+        
+        @keyframes leaf-grow {
+            0% { 
+                transform: scale(0) rotate(-30deg); 
+                opacity: 0;
+            }
+            100% { 
+                transform: scale(1) rotate(-30deg); 
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: #ff9ecb;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 15s infinite linear;
+            bottom: 50px;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+        
+        .flower-back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            z-index: 1001;
+        }
+        
+        .flower-back-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <!-- Halaman Password -->
+    <div id="passwordPage">
+        <div class="container">
+            <div class="photo-frame">
+                <img src="GambaR/Odyy.jpg" alt="My Favorite Person">
+            </div>
+            
+            <h1>Penasaran ga sih? Yuk isi passwordnya ❤️</h1>
+            
+            <div class="password-display" id="passwordDisplay"></div>
+            <div class="dots-container" id="dotsContainer">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            
+            <div class="keypad">
+                <div class="key" data-value="1">1</div>
+                <div class="key" data-value="2">2</div>
+                <div class="key" data-value="3">3</div>
+                <div class="key" data-value="4">4</div>
+                <div class="key" data-value="5">5</div>
+                <div class="key" data-value="6">6</div>
+                <div class="key" data-value="7">7</div>
+                <div class="key" data-value="8">8</div>
+                <div class="key" data-value="9">9</div>
+                <div class="key zero-key" data-value="0">0</div>
+            </div>
+            
+            <div class="clue">Clue: Tanggal & Bulan</div>
+            <div class="hearts">❤️ ❤️ ❤️</div>
+            
+            <div class="message" id="message"></div>
+            <button class="reset-btn" id="resetBtn">Reset Password</button>
+        </div>
+    </div>
+
+    <!-- Halaman Surat -->
+    <div id="letterPage">
+        <div class="letter">
+            <h1>Untuk Achnez Melody Putri💖</h1>
+            
+            <div class="date">26 Agustus 2026</div>
+            
+            <p>Haloo Sayangku,</p>
+            
+            <p>Hari ini adalah tanggal yang spesial.</p>
+
+            <p>Hari ini genap setahun setelah aku mengenal mu dan jatuh cinta kepadamu</p>
+            
+            <p>Terima kasih sudah menjadi cahaya dalam hariku, sudah membuat setiap detik bersamamu terasa spesial. Aku bersyukur bisa mengenalmu, mencintaimu, dan memilikimu.</p>
+            
+            <p>Mungkin aku tidak selalu bisa menjadi yang terbaik, tapi aku berjanji akan selalu berusaha membahagiakanmu setiap hari. Karena kamu pantas mendapatkan yang terbaik.</p>
+            
+            <p>Aku sayang kamu lebih dari yang bisa diungkapkan kata-kata. Terima kasih sudah menjadi bagian dari hidupku dan mengisi setiap hariku dengan tawa dan kebahagiaan.</p>
+            
+            <p>Dengan semua cinta,</p>
+            
+            <div class="signature">
+                <p>Ray Ricardo Simbolon</p>
+                <p>❤️❤️❤️</p>
+            </div>
+        </div>
+        
+        <button class="back-btn" id="backBtn">Selanjutnya</button>
+    </div>
+
+    <!-- Halaman Bunga -->
+    <div id="flowerPage">
+        <div class="title">I LOVE U</div>
+        <button class="flower-back-btn" id="flowerBackBtn">Kembali</button>
+        <div class="ground"></div>
+        <div class="garden" id="garden"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordDisplay = document.getElementById('passwordDisplay');
+            const dotsContainer = document.getElementById('dotsContainer');
+            const messageDiv = document.getElementById('message');
+            const resetBtn = document.getElementById('resetBtn');
+            const passwordPage = document.getElementById('passwordPage');
+            const letterPage = document.getElementById('letterPage');
+            const backBtn = document.getElementById('backBtn');
+            const flowerPage = document.getElementById('flowerPage');
+            const flowerBackBtn = document.getElementById('flowerBackBtn');
+            
+            let enteredPassword = '';
+            const correctPassword = '1512';
+            
+            // Update tampilan password
+            function updatePasswordDisplay() {
+                // Update dots
+                const dots = dotsContainer.querySelectorAll('.dot');
+                dots.forEach((dot, index) => {
+                    if (index < enteredPassword.length) {
+                        dot.classList.add('filled');
+                    } else {
+                        dot.classList.remove('filled');
+                    }
+                });
+                
+                // Tampilkan password sebagai bintang
+                passwordDisplay.textContent = '*'.repeat(enteredPassword.length);
+                
+                // Cek jika password sudah 4 digit
+                if (enteredPassword.length === 4) {
+                    if (enteredPassword === correctPassword) {
+                        messageDiv.textContent = 'Password benar! ❤️ Membuka surat...';
+                        messageDiv.className = 'message success';
+                        
+                        // Setelah 2 detik, pindah ke halaman surat
+                        setTimeout(() => {
+                            passwordPage.style.display = 'none';
+                            letterPage.style.display = 'block';
+                        }, 2000);
+                    } else {
+                        messageDiv.textContent = 'Password salah! Coba lagi atau ingat tanggal spesial kita 😉';
+                        messageDiv.className = 'message error';
+                        
+                        // Reset setelah 2 detik
+                        setTimeout(() => {
+                            enteredPassword = '';
+                            updatePasswordDisplay();
+                            messageDiv.className = 'message';
+                        }, 2000);
+                    }
+                }
+            }
+            
+            // Event listener untuk tombol keypad
+            document.querySelectorAll('.key').forEach(key => {
+                key.addEventListener('click', function() {
+                    if (enteredPassword.length < 4) {
+                        enteredPassword += this.getAttribute('data-value');
+                        updatePasswordDisplay();
+                    }
+                });
+            });
+            
+            // Event listener untuk tombol reset
+            resetBtn.addEventListener('click', function() {
+                enteredPassword = '';
+                updatePasswordDisplay();
+                messageDiv.className = 'message';
+            });
+            
+            // Event listener untuk tombol kembali
+            backBtn.addEventListener('click', function() {
+                letterPage.style.display = 'none';
+                flowerPage.style.display = 'block';
+                startFlowerAnimation();
+            });
+            
+            // Event listener untuk tombol kembali dari halaman bunga
+            flowerBackBtn.addEventListener('click', function() {
+                flowerPage.style.display = 'none';
+                passwordPage.style.display = 'flex';
+                enteredPassword = '';
+                updatePasswordDisplay();
+            });
+            
+            // Inisialisasi tampilan
+            updatePasswordDisplay();
+            
+            // Fungsi untuk animasi bunga
+            function startFlowerAnimation() {
+                const garden = document.getElementById('garden');
+                garden.innerHTML = '';
+                let spawnInterval = 800;
+                
+                // Membuat bintang-bintang
+                for (let i = 0; i < 100; i++) {
+                    createStar();
+                }
+                
+                // Membuat partikel
+                for (let i = 0; i < 50; i++) {
+                    createParticle();
+                }
+                
+                // Memulai proses spawn bunga otomatis
+                startSpawning();
+                
+                function startSpawning() {
+                    setInterval(function() {
+                        createFlower();
+                    }, spawnInterval);
+                }
+                
+                function createFlower() {
+                    const flower = document.createElement('div');
+                    flower.classList.add('flower');
+                    
+                    // Tipe bunga acak (untuk warna berbeda)
+                    const flowerType = Math.floor(Math.random() * 5) + 1;
+                    flower.setAttribute('data-type', flowerType);
+                    
+                    // Posisi acak
+                    const posX = Math.random() * window.innerWidth;
+                    
+                    flower.style.left = `${posX}px`;
+                    
+                    // Ukuran acak
+                    const size = Math.random() * 0.6 + 0.8;
+                    flower.style.transform = `scale(${size})`;
+                    
+                    // Kecepatan animasi acak
+                    const animSpeed = Math.random() * 3 + 3;
+                    flower.style.animationDuration = `${animSpeed}s`;
+                    
+                    // Membuat struktur bunga
+                    const petals = document.createElement('div');
+                    petals.classList.add('petals');
+                    
+                    for (let j = 0; j < 8; j++) {
+                        const petal = document.createElement('div');
+                        petal.classList.add('petal');
+                        petals.appendChild(petal);
+                    }
+                    
+                    const center = document.createElement('div');
+                    center.classList.add('center');
+                    
+                    const stem = document.createElement('div');
+                    stem.classList.add('stem');
+                    
+                    const leaf1 = document.createElement('div');
+                    leaf1.classList.add('leaf', 'leaf1');
+                    
+                    const leaf2 = document.createElement('div');
+                    leaf2.classList.add('leaf', 'leaf2');
+                    
+                    flower.appendChild(petals);
+                    flower.appendChild(center);
+                    flower.appendChild(stem);
+                    flower.appendChild(leaf1);
+                    flower.appendChild(leaf2);
+                    
+                    garden.appendChild(flower);
+                    
+                    // Menghapus bunga setelah selesai animasi untuk optimisasi
+                    setTimeout(() => {
+                        if (garden.contains(flower)) {
+                            garden.removeChild(flower);
+                        }
+                    }, 15000);
+                }
+                
+                function createStar() {
+                    const star = document.createElement('div');
+                    star.classList.add('star');
+                    
+                    // Posisi acak
+                    const posX = Math.random() * window.innerWidth;
+                    const posY = Math.random() * window.innerHeight;
+                    
+                    star.style.left = `${posX}px`;
+                    star.style.top = `${posY}px`;
+                    
+                    // Ukuran acak
+                    const size = Math.random() * 2 + 1;
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    
+                    // Animasi acak
+                    const animDelay = Math.random() * 5;
+                    star.style.animationDelay = `${animDelay}s`;
+                    
+                    garden.appendChild(star);
+                }
+                
+                function createParticle() {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // Ukuran acak
+                    const size = Math.random() * 3 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Posisi acak
+                    const posX = Math.random() * window.innerWidth;
+                    particle.style.left = `${posX}px`;
+                    
+                    // Warna pink dengan variasi
+                    const pinkShades = ['#ff9ecb', '#ff85ba', '#ff66a3', '#ff4d94', '#ff3385'];
+                    const randomColor = pinkShades[Math.floor(Math.random() * pinkShades.length)];
+                    particle.style.backgroundColor = randomColor;
+                    
+                    // Animasi dengan durasi acak
+                    const duration = Math.random() * 10 + 8;
+                    particle.style.animationDuration = `${duration}s`;
+                    
+                    // Delay acak
+                    const delay = Math.random() * 10;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    document.body.appendChild(particle);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
